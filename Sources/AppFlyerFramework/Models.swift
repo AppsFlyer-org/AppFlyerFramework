@@ -24,6 +24,10 @@ public enum Key: String {
     case c
     case af_adset
     case af_ad
+    
+    case app_type
+    case mb_uuid
+    case a_ssid
 }
 
 public enum Analog: String {
@@ -32,4 +36,8 @@ public enum Analog: String {
     case utmCampaign = "utm_campaign"
     case utmContent = "utm_content"
     case utmTerm = "utm_term"
+    
+    case appType = "1"
+    case mbUuid = "mb_uuid"
+    case aSsid = "a_ssid"
 }
