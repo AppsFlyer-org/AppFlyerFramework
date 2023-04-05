@@ -57,16 +57,16 @@ public final class AppыFlyerManager {
                     case .denied:
                         print("AuthorizationSatus is denied")
                         
-                        self.installCompletion.send(.nonOrganic(nil))
+                        self.installCompletion.send(.nonOrganic([:]))
                         self.appsFlyerDelegate.installCompletion = nil
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
                         
-                        self.installCompletion.send(.nonOrganic(nil))
+                        self.installCompletion.send(.nonOrganic([:]))
                         self.appsFlyerDelegate.installCompletion = nil
                     case .restricted:
                         print("AuthorizationSatus is restricted")
-                        self.installCompletion.send(.nonOrganic(nil))
+                        self.installCompletion.send(.nonOrganic([:]))
                         self.appsFlyerDelegate.installCompletion = nil
                     case .authorized:
                         print("AuthorizationSatus is authorized")
