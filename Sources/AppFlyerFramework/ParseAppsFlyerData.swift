@@ -30,8 +30,6 @@ final class ParseAppsFlyerData {
     
     private func createParameters(conversionInfo: [AnyHashable : Any]) -> [String: String] {
         var parameters: [String: String] = [:]
-        parameters[Key.mb_uuid.rawValue] = ""
-        parameters[Key.a_ssid.rawValue] = ""
         conversionInfo.forEach({ key, value in
             if let key = key as? String, let value = value as? String, let keyCreate = Key(rawValue: key) {
                 let keyParameter = getAnalog(key: keyCreate)
