@@ -13,7 +13,8 @@ public final class AppыFlyerManager {
     private let appsFlyerDelegate = AppsFlyerDelegate()
     private let appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
     private let parseAppsFlyerData = ParseAppsFlyerData()
-    private var appsFlayerInstall: Install?
+    
+    public var appsFlayerInstall: Install?
     public var installCompletion = PassthroughSubject<Install, Never>()
     public var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
     
