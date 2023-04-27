@@ -56,32 +56,31 @@ public final class AppыFlyerManager {
                 switch status {
                     case .denied:
                         print("AuthorizationSatus is denied")
-                        
                         self.installCompletion.send(.nonOrganic([:]))
-                        self.appsFlyerDelegate.installCompletion = nil
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
                         
                         self.installCompletion.send(.nonOrganic([:]))
-                        self.appsFlyerDelegate.installCompletion = nil
                     case .restricted:
                         print("AuthorizationSatus is restricted")
                         self.installCompletion.send(.nonOrganic([:]))
-                        self.appsFlyerDelegate.installCompletion = nil
                     case .authorized:
                         print("AuthorizationSatus is authorized")
                     @unknown default:
                         fatalError("Invalid authorization status")
                 }
             }
-        }
+        } 
     }
     
     private func setup(){
         appsFlyerDeepLinkDelegate.completionDeepLinkResult = completionDeepLinkResult
-        appsFlyerDelegate.installCompletion = { [weak self] install in
-            guard let install = install else { return }
+        self.parseAppsFlyerData.installCompletion = { [weak self] install in
             guard let self = self else { return }
+            guard let install = install else {
+                self.installCompletion.send(.nonOrganic([:]))
+                return
+            }
             self.installCompletion.send(install)
         }
     }

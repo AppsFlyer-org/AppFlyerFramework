@@ -12,10 +12,9 @@ final public class AppsFlyerDelegate: NSObject, AppsFlyerLibDelegate {
     private let parseAppsFlyerData = ParseAppsFlyerData()
     
     public var urlParameters: (([String: String]?) -> Void)?
-    public var installCompletion: ((Install?) -> Void)?
     
     public func onConversionDataSuccess(_ conversionInfo: [AnyHashable : Any]) {
-        self.parseAppsFlyerData.installCompletion = self.installCompletion
+        self.parseAppsFlyerData.installCompletion?(.nonOrganic([:]))
         self.parseAppsFlyerData.parseCampaign(conversionInfo)
     }
     
