@@ -8,7 +8,7 @@ import AppsFlyerLib
 import Combine
 import AppTrackingTransparency
 
-public final class AppыFlyerManager {
+public final class AppsFlyerManager {
     
     private let appsFlyerDelegate = AppsFlyerDelegate()
     private let appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
