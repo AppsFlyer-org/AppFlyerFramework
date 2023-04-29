@@ -57,16 +57,16 @@ public final class AppsFlyerManager {
                 switch status {
                     case .denied:
                         print("AuthorizationSatus is denied")
-                        self.appsFlayerInstall = .nonOrganic([:])
-                        self.installCompletion.send(.nonOrganic([:]))
+//                        self.appsFlayerInstall = .nonOrganic([:])
+//                        self.installCompletion.send(.nonOrganic([:]))
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
-                        self.appsFlayerInstall = .nonOrganic([:])
-                        self.installCompletion.send(.nonOrganic([:]))
+//                        self.appsFlayerInstall = .nonOrganic([:])
+//                        self.installCompletion.send(.nonOrganic([:]))
                     case .restricted:
                         print("AuthorizationSatus is restricted")
-                        self.appsFlayerInstall = .nonOrganic([:])
-                        self.installCompletion.send(.nonOrganic([:]))
+//                        self.appsFlayerInstall = .nonOrganic([:])
+//                        self.installCompletion.send(.nonOrganic([:]))
                     case .authorized:
                         print("AuthorizationSatus is authorized")
                     @unknown default:
