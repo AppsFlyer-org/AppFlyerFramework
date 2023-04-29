@@ -51,7 +51,6 @@ public final class AppsFlyerManager {
     }
     
     private func requestTrackingAuthorization() {
-        self.setup()
         if #available(iOS 14, *) {
             ATTrackingManager.requestTrackingAuthorization { [weak self] (status) in
                 guard let self = self else { return }
