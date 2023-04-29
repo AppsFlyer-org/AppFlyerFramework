@@ -64,5 +64,5 @@ final class ParseAppsFlyerData {
         }
     }
     
-    init(){}
+    public init(){}
 }

@@ -77,6 +77,7 @@ public final class AppsFlyerManager {
     }
     
     private func setup(){
+        appsFlyerDelegate.parseAppsFlyerData = self.parseAppsFlyerData
         appsFlyerDeepLinkDelegate.completionDeepLinkResult = completionDeepLinkResult
         self.parseAppsFlyerData.installCompletion.sink { [weak self] install in
             guard let self = self else { return }
