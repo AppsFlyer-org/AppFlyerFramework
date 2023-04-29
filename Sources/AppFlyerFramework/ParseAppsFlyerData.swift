@@ -4,21 +4,22 @@
 //
 //  Created by AppsFlyer
 //
+import Combine
 import Foundation
 
 final class ParseAppsFlyerData {
     
-    var installCompletion: ((Install?) -> Void)?
+    public var installCompletion = PassthroughSubject<Install, Never>()
     
     func parseCampaign(_ conversionInfo: [AnyHashable : Any]) {
         switch afStatus(conversionInfo: conversionInfo) {
             case .none:
-                installCompletion?(nil)
+                installCompletion.send(.organic)
             case .organic:
-                installCompletion?(.organic)
+                installCompletion.send(.organic)
             case .nonOrganic:
                 let parameters = self.createParameters(conversionInfo: conversionInfo)
-                installCompletion?(.nonOrganic(parameters))
+                installCompletion.send(.nonOrganic(parameters))
         }
     }
     

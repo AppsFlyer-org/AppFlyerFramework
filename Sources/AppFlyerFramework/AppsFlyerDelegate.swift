@@ -18,7 +18,7 @@ final public class AppsFlyerDelegate: NSObject, AppsFlyerLibDelegate {
     }
     
     public func onConversionDataFail(_ error: Error) {
-        self.parseAppsFlyerData.installCompletion?(nil)
+        self.parseAppsFlyerData.installCompletion.send(.nonOrganic([:]))
         print("Error server data: class: AppsFlyerGetData ->, function: onConversionDataFail -> data: onConversionDataSuccess ->, description: ", error.localizedDescription)
     }
     

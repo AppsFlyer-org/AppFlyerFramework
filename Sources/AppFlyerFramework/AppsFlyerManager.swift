@@ -13,6 +13,7 @@ public final class AppsFlyerManager {
     private let appsFlyerDelegate = AppsFlyerDelegate()
     private let appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
     private let parseAppsFlyerData = ParseAppsFlyerData()
+    private var anyCancel: Set<AnyCancellable> = []
     
     public var appsFlayerInstall: Install?
     public var installCompletion = PassthroughSubject<Install, Never>()
@@ -78,14 +79,10 @@ public final class AppsFlyerManager {
     
     private func setup(){
         appsFlyerDeepLinkDelegate.completionDeepLinkResult = completionDeepLinkResult
-        self.parseAppsFlyerData.installCompletion = { [weak self] install in
+        self.parseAppsFlyerData.installCompletion.sink { [weak self] install in
             guard let self = self else { return }
-            guard let install = install else {
-                self.installCompletion.send(.nonOrganic([:]))
-                return
-            }
             self.installCompletion.send(install)
-        }
+        }.store(in: &anyCancel)
     }
     
     public init(){}
