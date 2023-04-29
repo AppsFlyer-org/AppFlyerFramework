@@ -10,10 +10,19 @@ import AppTrackingTransparency
 
 public final class AppsFlyerManager {
     
-    private let appsFlyerDelegate = AppsFlyerDelegate()
-    private let appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
-    private let parseAppsFlyerData = ParseAppsFlyerData()
-    private var anyCancel: Set<AnyCancellable> = []
+    private let appsFlyerDelegate: AppsFlyerDelegate
+    private let appsFlyerDeepLinkDelegate: AppsFlyerDeepLinkDelegate
+    private let parseAppsFlyerData: ParseAppsFlyerData
+    private var anyCancel: Set<AnyCancellable>
+    
+    public init() {
+        self.appsFlyerDelegate = AppsFlyerDelegate()
+        self.appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
+        self.parseAppsFlyerData = ParseAppsFlyerData()
+        self.anyCancel = []
+    }
+    
+   
 
     public var installCompletion = PassthroughSubject<Install, Never>()
     public var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
@@ -80,6 +89,4 @@ public final class AppsFlyerManager {
             self.installCompletion.send(install)
         }.store(in: &anyCancel)
     }
-    
-    public init(){}
 }
