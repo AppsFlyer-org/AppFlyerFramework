@@ -14,13 +14,11 @@ public final class AppsFlyerManager {
     private let appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
     private let parseAppsFlyerData = ParseAppsFlyerData()
     private var anyCancel: Set<AnyCancellable> = []
-    
-    public var appsFlayerInstall: Install?
+
     public var installCompletion = PassthroughSubject<Install, Never>()
     public var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
     
     public func setup(appID: String, devKey: String, interval: Double = 120){
-        self.setup()
         AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: interval)
         AppsFlyerLib.shared().appsFlyerDevKey     = devKey
         AppsFlyerLib.shared().appleAppID          = appID
@@ -57,18 +55,16 @@ public final class AppsFlyerManager {
                 switch status {
                     case .denied:
                         print("AuthorizationSatus is denied")
-                        self.appsFlayerInstall = .nonOrganic([:])
                         self.installCompletion.send(.nonOrganic([:]))
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
-                        self.appsFlayerInstall = .nonOrganic([:])
                         self.installCompletion.send(.nonOrganic([:]))
                     case .restricted:
                         print("AuthorizationSatus is restricted")
-                        self.appsFlayerInstall = .nonOrganic([:])
                         self.installCompletion.send(.nonOrganic([:]))
                     case .authorized:
                         print("AuthorizationSatus is authorized")
+                        self.subscribeParseData()
                     @unknown default:
                         fatalError("Invalid authorization status")
                 }
@@ -76,7 +72,7 @@ public final class AppsFlyerManager {
         } 
     }
     
-    private func setup(){
+    private func subscribeParseData(){
         appsFlyerDelegate.parseAppsFlyerData = self.parseAppsFlyerData
         appsFlyerDeepLinkDelegate.completionDeepLinkResult = completionDeepLinkResult
         self.parseAppsFlyerData.installCompletion.sink { [weak self] install in

@@ -18,16 +18,18 @@ final public class AppsFlyerDelegate: NSObject, AppsFlyerLibDelegate {
     }
     
     public func onConversionDataFail(_ error: Error) {
-        self.parseAppsFlyerData?.installCompletion.send(.nonOrganic([:]))
+        self.parseAppsFlyerData?.parseCampaign([:])
         print("Error server data: class: AppsFlyerGetData ->, function: onConversionDataFail -> data: onConversionDataSuccess ->, description: ", error.localizedDescription)
     }
     
     public func onAppOpenAttribution(_ attributionData: [AnyHashable : Any]) {
         print("\(attributionData)")
+        self.parseAppsFlyerData?.parseCampaign([:])
     }
     
     public func onAppOpenAttributionFailure(_ error: Error) {
         print(error)
+        self.parseAppsFlyerData?.parseCampaign([:])
     }
     
     override init(){}
