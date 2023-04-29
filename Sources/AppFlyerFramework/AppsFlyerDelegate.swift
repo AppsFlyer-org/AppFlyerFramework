@@ -14,7 +14,6 @@ final public class AppsFlyerDelegate: NSObject, AppsFlyerLibDelegate {
     public var urlParameters: (([String: String]?) -> Void)?
     
     public func onConversionDataSuccess(_ conversionInfo: [AnyHashable : Any]) {
-        self.parseAppsFlyerData.installCompletion?(.nonOrganic([:]))
         self.parseAppsFlyerData.parseCampaign(conversionInfo)
     }
     
