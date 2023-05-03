@@ -7,18 +7,22 @@
 import Combine
 import Foundation
 
-final class ParseAppsFlyerData {
+public final class ParseAppsFlyerData {
     
     public var installCompletion = PassthroughSubject<Install, Never>()
+    public var installGet: Install?
     
     func parseCampaign(_ conversionInfo: [AnyHashable : Any]) {
         switch afStatus(conversionInfo: conversionInfo) {
             case .none:
                 installCompletion.send(.organic)
+                installGet = .organic
             case .organic:
                 installCompletion.send(.organic)
+                installGet = .organic
             case .nonOrganic:
                 let parameters = self.createParameters(conversionInfo: conversionInfo)
+                installGet = .nonOrganic(parameters)
                 installCompletion.send(.nonOrganic(parameters))
         }
     }

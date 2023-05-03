@@ -12,8 +12,9 @@ public final class AppsFlyerManager {
     
     private let appsFlyerDelegate: AppsFlyerDelegate
     private let appsFlyerDeepLinkDelegate: AppsFlyerDeepLinkDelegate
-    private let parseAppsFlyerData: ParseAppsFlyerData
     private var anyCancel: Set<AnyCancellable>
+    
+    public let parseAppsFlyerData: ParseAppsFlyerData
     
     public init() {
         self.appsFlyerDelegate = AppsFlyerDelegate()
