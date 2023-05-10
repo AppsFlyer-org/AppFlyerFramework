@@ -52,29 +52,35 @@ public final class AppsFlyerManager {
         AppsFlyerLib.shared().isDebug = isDebug
     }
     
-    public func startRequestTrackingAuthorization(){
+    public func startRequestTrackingAuthorization(isIDFA: Bool){
         AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
         AppsFlyerLib.shared().start()
-        requestTrackingAuthorization()
+        requestTrackingAuthorization(isIDFA: isIDFA)
     }
     
-    private func requestTrackingAuthorization() {
+    private func requestTrackingAuthorization(isIDFA: Bool) {
         if #available(iOS 14, *) {
             ATTrackingManager.requestTrackingAuthorization { [weak self] (status) in
                 guard let self = self else { return }
                 switch status {
                     case .denied:
                         print("AuthorizationSatus is denied")
-                        self.installCompletion.send(.nonOrganic([:]))
-                        self.parseAppsFlyerData.installGet = .nonOrganic([:])
+                        if isIDFA {
+                            self.installCompletion.send(.nonOrganic([:]))
+                            self.parseAppsFlyerData.installGet = .nonOrganic([:])
+                        }
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
-                        self.installCompletion.send(.nonOrganic([:]))
-                        self.parseAppsFlyerData.installGet = .nonOrganic([:])
+                        if isIDFA {
+                            self.installCompletion.send(.nonOrganic([:]))
+                            self.parseAppsFlyerData.installGet = .nonOrganic([:])
+                        }
                     case .restricted:
                         print("AuthorizationSatus is restricted")
-                        self.installCompletion.send(.nonOrganic([:]))
-                        self.parseAppsFlyerData.installGet = .nonOrganic([:])
+                        if isIDFA {
+                            self.installCompletion.send(.nonOrganic([:]))
+                            self.parseAppsFlyerData.installGet = .nonOrganic([:])
+                        }
                     case .authorized:
                         print("AuthorizationSatus is authorized")
                         self.subscribeParseData()
@@ -82,7 +88,7 @@ public final class AppsFlyerManager {
                         fatalError("Invalid authorization status")
                 }
             }
-        } 
+        }
     }
     
     private func subscribeParseData(){
