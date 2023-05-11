@@ -87,7 +87,11 @@ public final class AppsFlyerManager {
             self.installCompletion.send(.nonOrganic([:]))
             self.parseAppsFlyerData.installGet = .nonOrganic([:])
         } else {
-            self.subscribeParseData()
+            if let installGet = appsFlyerDelegate.parseAppsFlyerData?.installGet {
+                self.installCompletion.send(installGet)
+            } else {
+                self.subscribeParseData()
+            }
         }
     }
     
