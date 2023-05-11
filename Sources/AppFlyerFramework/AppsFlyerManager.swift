@@ -20,6 +20,7 @@ public final class AppsFlyerManager {
         self.appsFlyerDelegate = AppsFlyerDelegate()
         self.appsFlyerDeepLinkDelegate = AppsFlyerDeepLinkDelegate()
         self.parseAppsFlyerData = ParseAppsFlyerData()
+        self.appsFlyerDelegate.parseAppsFlyerData = self.parseAppsFlyerData
         self.anyCancel = []
     }
     
@@ -96,7 +97,6 @@ public final class AppsFlyerManager {
     }
     
     private func subscribeParseData(){
-        appsFlyerDelegate.parseAppsFlyerData = self.parseAppsFlyerData
         appsFlyerDeepLinkDelegate.completionDeepLinkResult = completionDeepLinkResult
         self.parseAppsFlyerData.installCompletion.sink { [weak self] install in
             guard let self = self else { return }
