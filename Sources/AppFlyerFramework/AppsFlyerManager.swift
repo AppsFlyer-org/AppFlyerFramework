@@ -65,22 +65,13 @@ public final class AppsFlyerManager {
                 switch status {
                     case .denied:
                         print("AuthorizationSatus is denied")
-                        if isIDFA {
-                            self.installCompletion.send(.nonOrganic([:]))
-                            self.parseAppsFlyerData.installGet = .nonOrganic([:])
-                        }
+                        self.setupIDFA(isIDFA: isIDFA)
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
-                        if isIDFA {
-                            self.installCompletion.send(.nonOrganic([:]))
-                            self.parseAppsFlyerData.installGet = .nonOrganic([:])
-                        }
+                        self.setupIDFA(isIDFA: isIDFA)
                     case .restricted:
                         print("AuthorizationSatus is restricted")
-                        if isIDFA {
-                            self.installCompletion.send(.nonOrganic([:]))
-                            self.parseAppsFlyerData.installGet = .nonOrganic([:])
-                        }
+                        self.setupIDFA(isIDFA: isIDFA)
                     case .authorized:
                         print("AuthorizationSatus is authorized")
                         self.subscribeParseData()
@@ -88,6 +79,15 @@ public final class AppsFlyerManager {
                         fatalError("Invalid authorization status")
                 }
             }
+        }
+    }
+    
+    private func setupIDFA(isIDFA: Bool){
+        if isIDFA {
+            self.installCompletion.send(.nonOrganic([:]))
+            self.parseAppsFlyerData.installGet = .nonOrganic([:])
+        } else {
+            self.subscribeParseData()
         }
     }
     
