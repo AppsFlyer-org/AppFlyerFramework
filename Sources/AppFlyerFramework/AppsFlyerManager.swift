@@ -84,15 +84,15 @@ public final class AppsFlyerManager {
     }
     
     private func setupIDFA(isIDFA: Bool){
-        if !isIDFA {
-            self.installCompletion.send(.nonOrganic([:]))
-            self.parseAppsFlyerData.installGet = .nonOrganic([:])
-        } else {
+        if isIDFA {
             if let installGet = appsFlyerDelegate.parseAppsFlyerData?.installGet {
                 self.installCompletion.send(installGet)
             } else {
                 self.subscribeParseData()
             }
+        } else {
+            self.installCompletion.send(.nonOrganic([:]))
+            self.parseAppsFlyerData.installGet = .nonOrganic([:])
         }
     }
     
