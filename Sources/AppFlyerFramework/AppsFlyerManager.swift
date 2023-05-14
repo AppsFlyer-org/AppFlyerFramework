@@ -56,9 +56,7 @@ public final class AppsFlyerManager {
     public func startRequestTrackingAuthorization(isIDFA: Bool){
         AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
         AppsFlyerLib.shared().start()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.requestTrackingAuthorization(isIDFA: isIDFA)
-        }
+        self.requestTrackingAuthorization(isIDFA: isIDFA)
     }
     
     private func requestTrackingAuthorization(isIDFA: Bool) {
