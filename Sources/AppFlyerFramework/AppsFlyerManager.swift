@@ -56,7 +56,9 @@ public final class AppsFlyerManager {
     public func startRequestTrackingAuthorization(isIDFA: Bool){
         AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
         AppsFlyerLib.shared().start()
-        requestTrackingAuthorization(isIDFA: isIDFA)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.requestTrackingAuthorization(isIDFA: isIDFA)
+        }
     }
     
     private func requestTrackingAuthorization(isIDFA: Bool) {
@@ -69,7 +71,7 @@ public final class AppsFlyerManager {
                         self.setupIDFA(isIDFA: isIDFA)
                     case .notDetermined:
                         print("AuthorizationSatus is notDetermined")
-                        self.setupIDFA(isIDFA: isIDFA)
+                        self.subscribeParseData()
                     case .restricted:
                         print("AuthorizationSatus is restricted")
                         self.setupIDFA(isIDFA: isIDFA)
