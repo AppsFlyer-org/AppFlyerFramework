@@ -30,7 +30,7 @@ public final class AppsFlyerManager {
     public var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
     
     public func setup(appID: String, devKey: String, interval: Double = 120){
-        AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: interval)
+        //AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: interval)
         AppsFlyerLib.shared().appsFlyerDevKey     = devKey
         AppsFlyerLib.shared().appleAppID          = appID
         AppsFlyerLib.shared().delegate            = self.appsFlyerDelegate
