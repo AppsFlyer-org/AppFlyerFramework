@@ -4,51 +4,114 @@
 //
 //  Created by AppsFlyer
 //
+import Combine
 import AppsFlyerLib
 import Foundation
 
-final class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
+final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
     
-    var completion: ((Any?) -> Void)?
-    var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
+    public var installCompletion = PassthroughSubject<Install, Never>()
+    public var installGet: Install?
+    public var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
     
     public func didResolveDeepLink(_ result: DeepLinkResult) {
-        var fruitNameStr: String?
         completionDeepLinkResult?(result)
         switch result.status {
             case .notFound:
+                self.installGet = .organic
+                self.installCompletion.send(.organic)
                 print("[AFSDK] Deep link not found")
                 return
             case .failure:
+                self.installGet = .organic
+                self.installCompletion.send(.organic)
                 print("Error %@", result.error!)
                 return
             case .found:
                 print("[AFSDK] Deep link found")
         }
         
-        guard let deepLinkObj:DeepLink = result.deepLink else {
+        guard let deepLink: DeepLink = result.deepLink else {
+            self.installGet = .organic
+            self.installCompletion.send(.organic)
             print("[AFSDK] Could not extract deep link object")
             return
         }
-        
-        if deepLinkObj.clickEvent.keys.contains("deep_link_sub2") {
-            let ReferrerId:String = deepLinkObj.clickEvent["deep_link_sub2"] as! String
-            print("[AFSDK] AppsFlyer: Referrer ID: \(ReferrerId)")
-        } else {
-            print("[AFSDK] Could not extract referrerId")
+        let conversionInfo = self.parse(with: deepLink)
+        let parameters = self.createParameters(conversionInfo: conversionInfo)
+        self.installCompletion.send(.nonOrganic(parameters))
+        self.installGet = .nonOrganic(parameters)
+    }
+    
+    private func parse(with deepLink: DeepLink) -> [AnyHashable : Any] {
+        guard let deeplinkValue = deepLink.deeplinkValue as? NSString else {
+            return [:]
         }
+        let urlParameters = deeplinkValue.components(separatedBy: "?")
+        let parameters = urlParameters.last?.components(separatedBy: "&")
+        var dictionaryParameters: [AnyHashable: Any] = [:]
         
-        let deepLinkStr:String = deepLinkObj.toString()
-        print("[AFSDK] DeepLink data is: \(deepLinkStr)")
+        parameters?.forEach({ element in
+            if let key = element.components(separatedBy: "=").last,
+               let value = element.components(separatedBy: "=").first {
+                dictionaryParameters.updateValue(value, forKey: key)
+            }
+        })
+        return dictionaryParameters
+    }
+    
+    private func createParameters(conversionInfo: [AnyHashable : Any]) -> [String: String] {
+        var parameters: [String: String] = [:]
+        conversionInfo.forEach({ key, value in
+            if let key = key as? String, let value = value as? String, let keyCreate = Key(rawValue: key) {
+                let keyParameter = getAnalog(key: keyCreate)
+                let valueParameter = value
+                parameters.updateValue(valueParameter, forKey: keyParameter)
+            }
+        })
         
-        if( deepLinkObj.isDeferred == true) {
-            print("[AFSDK] This is a deferred deep link")
+        return parameters
+    }
+    
+    private func getAnalog(key: Key) -> String {
+        switch key {
+            case .pid:
+                return Analog.utmSource.rawValue
+            case .af_channel:
+                return Analog.utmMedium.rawValue
+            case .c:
+                return Analog.utmCampaign.rawValue
+            case .af_adset:
+                return Analog.utmContent.rawValue
+            case .af_ad:
+                return Analog.utmTerm.rawValue
+                
+            case .app_type:
+                return Analog.appType.rawValue
+            case .mb_uuid:
+                return ""
+            case .a_ssid:
+                return ""
         }
-        else {
-            NSLog("[AFSDK] This is a direct deep link")
-        }
-        
-        fruitNameStr = deepLinkObj.deeplinkValue
-        completion?(fruitNameStr)
     }
 }
+//utm_source=test_source&utm_medium=test_medium&utm_campaign=test_campaign
+//
+//if deepLinkObj.clickEvent.keys.contains("deep_link_sub2") {
+//    let ReferrerId:String = deepLinkObj.clickEvent["deep_link_sub2"] as! String
+//    print("[AFSDK] AppsFlyer: Referrer ID: \(ReferrerId)")
+//} else {
+//    print("[AFSDK] Could not extract referrerId")
+//}
+//
+//let deepLinkStr:String = deepLinkObj.toString()
+//print("[AFSDK] DeepLink data is: \(deepLinkStr)")
+//
+//if( deepLinkObj.isDeferred == true) {
+//    print("[AFSDK] This is a deferred deep link")
+//}
+//else {
+//    NSLog("[AFSDK] This is a direct deep link")
+//}
+//
+//fruitNameStr = deepLinkObj.deeplinkValue

@@ -30,7 +30,7 @@ public final class AppsFlyerManager {
     public var completionDeepLinkResult: ((DeepLinkResult) -> Void)?
     
     public func setup(appID: String, devKey: String, interval: Double = 120){
-        //AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: interval)
+        AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: interval)
         AppsFlyerLib.shared().appsFlyerDevKey     = devKey
         AppsFlyerLib.shared().appleAppID          = appID
         AppsFlyerLib.shared().delegate            = self.appsFlyerDelegate
@@ -48,6 +48,27 @@ public final class AppsFlyerManager {
         #else
         AppsFlyerLib.shared().isDebug = true
         #endif
+    }
+    
+    public func startWithDeeplink(){
+        self.setCustomUserId()
+        AppsFlyerLib.shared().start(completionHandler: { (dictionary, error) in
+            if (error != nil){
+                print(error ?? "")
+                return
+            } else {
+                print(dictionary ?? "")
+                return
+            }
+        })
+        if let installGet = self.appsFlyerDeepLinkDelegate.installGet {
+            self.installCompletion.send(installGet)
+        } else {
+            self.appsFlyerDeepLinkDelegate.installCompletion.sink { [weak self] install in
+                guard let self = self else { return }
+                self.installCompletion.send(install)
+            }.store(in: &anyCancel)
+        }
     }
     
     public func startRequestTrackingAuthorization(isIDFA: Bool){
