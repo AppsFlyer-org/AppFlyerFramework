@@ -23,8 +23,7 @@ final public class AppsFlyerDelegate: NSObject, AppsFlyerLibDelegate {
     }
     
     public func onAppOpenAttribution(_ attributionData: [AnyHashable : Any]) {
-        print("\(attributionData)")
-        self.parseAppsFlyerData?.parseCampaign([:])
+        self.parseAppsFlyerData?.parseCampaign(attributionData)
     }
     
     public func onAppOpenAttributionFailure(_ error: Error) {

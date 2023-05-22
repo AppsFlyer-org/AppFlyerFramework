@@ -35,9 +35,23 @@ public final class AppsFlyerManager {
         AppsFlyerLib.shared().appleAppID          = appID
         AppsFlyerLib.shared().delegate            = self.appsFlyerDelegate
         AppsFlyerLib.shared().deepLinkDelegate    = self.appsFlyerDeepLinkDelegate
-        AppsFlyerLib.shared().isDebug             = true
+        self.setDebag()
         AppsFlyerLib.shared().useUninstallSandbox = true
         AppsFlyerLib.shared().minTimeBetweenSessions = 10
+    }
+    
+    public func setDebag(){
+        #if DEBUG
+        AppsFlyerLib.shared().isDebug = true
+        #elseif RELEASE
+        AppsFlyerLib.shared().isDebug = false
+        #else
+        AppsFlyerLib.shared().isDebug = true
+        #endif
+    }
+    
+    public func startRequestTrackingAuthorization(isIDFA: Bool){
+        self.setCustomUserId()
         AppsFlyerLib.shared().start(completionHandler: { (dictionary, error) in
             if (error != nil){
                 print(error ?? "")
@@ -47,16 +61,19 @@ public final class AppsFlyerManager {
                 return
             }
         })
-    }
-    
-    public func setDebag(isDebug: Bool){
-        AppsFlyerLib.shared().isDebug = isDebug
-    }
-    
-    public func startRequestTrackingAuthorization(isIDFA: Bool){
-        AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
-        AppsFlyerLib.shared().start()
         self.requestTrackingAuthorization(isIDFA: isIDFA)
+    }
+    
+    private func setCustomUserId(){
+        let customUserId = UserDefaults.standard.string(forKey: "customUserId")
+        if(customUserId != nil && customUserId != ""){
+            // Set CUID in AppsFlyer SDK for this session
+            AppsFlyerLib.shared().customerUserID = customUserId
+        } else {
+            let customUserId = UUID().uuidString
+            UserDefaults.standard.set(customUserId, forKey: "customUserId")
+            AppsFlyerLib.shared().customerUserID = customUserId
+        }
     }
     
     private func requestTrackingAuthorization(isIDFA: Bool) {
