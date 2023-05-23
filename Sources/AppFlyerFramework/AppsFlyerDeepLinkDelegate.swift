@@ -28,19 +28,21 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
                 print("Error %@", result.error!)
                 return
             case .found:
-                print("[AFSDK] Deep link found")
+                guard let deepLink: DeepLink = result.deepLink else {
+                    self.installGet = .organic
+                    self.installCompletion.send(.organic)
+                    print("[AFSDK] Could not extract deep link object")
+                    return
+                }
+                let conversionInfo = self.parse(with: deepLink)
+                let parameters = self.createParameters(conversionInfo: conversionInfo)
+                self.installCompletion.send(.nonOrganic(parameters))
+                self.installGet = .nonOrganic(parameters)
+            default:
+                self.installGet = .organic
+                self.installCompletion.send(.organic)
+                return
         }
-        
-        guard let deepLink: DeepLink = result.deepLink else {
-            self.installGet = .organic
-            self.installCompletion.send(.organic)
-            print("[AFSDK] Could not extract deep link object")
-            return
-        }
-        let conversionInfo = self.parse(with: deepLink)
-        let parameters = self.createParameters(conversionInfo: conversionInfo)
-        self.installCompletion.send(.nonOrganic(parameters))
-        self.installGet = .nonOrganic(parameters)
     }
     
     private func parse(with deepLink: DeepLink) -> [AnyHashable : Any] {
