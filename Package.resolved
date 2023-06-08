@@ -3,10 +3,10 @@
     {
       "identity" : "appsflyerframework",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git",
+      "location" : "https://github.com/AppsFlyerSDK/AppsFlyerFramework",
       "state" : {
-        "revision" : "7cf56a908fb602ffaab7a85e6697c6f383fdcf96",
-        "version" : "6.11.1"
+        "branch" : "6.9.1",
+        "revision" : "7a3cd712a77b30e487e53102b101c5e9ff96a95e"
       }
     }
   ],
