@@ -79,6 +79,12 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
         switch key {
             case .pid:
                 return Analog.utmSource.rawValue
+            case .source:
+                return Analog.utmMedium.rawValue
+            case .qtag:
+                return Analog.utmContent.rawValue
+            case .click_id:
+                return Analog.utmTerm.rawValue
             case .af_channel:
                 return Analog.utmMedium.rawValue
             case .c:
@@ -97,23 +103,3 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
         }
     }
 }
-//utm_source=test_source&utm_medium=test_medium&utm_campaign=test_campaign
-//
-//if deepLinkObj.clickEvent.keys.contains("deep_link_sub2") {
-//    let ReferrerId:String = deepLinkObj.clickEvent["deep_link_sub2"] as! String
-//    print("[AFSDK] AppsFlyer: Referrer ID: \(ReferrerId)")
-//} else {
-//    print("[AFSDK] Could not extract referrerId")
-//}
-//
-//let deepLinkStr:String = deepLinkObj.toString()
-//print("[AFSDK] DeepLink data is: \(deepLinkStr)")
-//
-//if( deepLinkObj.isDeferred == true) {
-//    print("[AFSDK] This is a deferred deep link")
-//}
-//else {
-//    NSLog("[AFSDK] This is a direct deep link")
-//}
-//
-//fruitNameStr = deepLinkObj.deeplinkValue

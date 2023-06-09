@@ -24,6 +24,9 @@ public enum Key: String {
     case c
     case af_adset
     case af_ad
+    case click_id
+    case qtag
+    case source
     
     case app_type
     case mb_uuid
