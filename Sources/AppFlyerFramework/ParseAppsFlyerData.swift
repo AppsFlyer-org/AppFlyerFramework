@@ -50,6 +50,12 @@ public final class ParseAppsFlyerData {
         switch key {
             case .pid:
                 return Analog.utmSource.rawValue
+            case .source:
+                return Analog.utmMedium.rawValue
+            case .qtag:
+                return Analog.utmContent.rawValue
+            case .click_id:
+                return Analog.utmTerm.rawValue
             case .af_channel:
                 return Analog.utmMedium.rawValue
             case .c:
