@@ -65,9 +65,12 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
     private func createParameters(conversionInfo: [AnyHashable : Any]) -> [String: String] {
         var parameters: [String: String] = [:]
         conversionInfo.forEach({ key, value in
-            if let key = key as? String, let value = value as? String, let keyCreate = Key(rawValue: key) {
-                let keyParameter = getAnalog(key: keyCreate)
-                let valueParameter = value
+//            if let key = key as? String, let value = value as? String, let keyCreate = Key(rawValue: key) {
+//                let keyParameter = getAnalog(key: keyCreate)
+//                let valueParameter = value
+//                parameters.updateValue(valueParameter, forKey: keyParameter)
+//            }
+            if let valueParameter = value as? String, let keyParameter = key as? String {
                 parameters.updateValue(valueParameter, forKey: keyParameter)
             }
         })
