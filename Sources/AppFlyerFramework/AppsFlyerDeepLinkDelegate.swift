@@ -54,8 +54,8 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
         var dictionaryParameters: [AnyHashable: Any] = [:]
         
         parameters?.forEach({ element in
-            if let key = element.components(separatedBy: "=").last,
-               let value = element.components(separatedBy: "=").first {
+            if let value = element.components(separatedBy: "=").last,
+               let key = element.components(separatedBy: "=").first {
                 dictionaryParameters.updateValue(value, forKey: key)
             }
         })
@@ -71,7 +71,7 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
 //                parameters.updateValue(valueParameter, forKey: keyParameter)
 //            }
             if let valueParameter = value as? String, let keyParameter = key as? String {
-                parameters.updateValue(keyParameter, forKey: valueParameter)
+                parameters.updateValue(valueParameter, forKey: keyParameter)
             }
         })
         
