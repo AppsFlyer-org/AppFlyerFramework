@@ -71,7 +71,7 @@ final public class AppsFlyerDeepLinkDelegate: NSObject, DeepLinkDelegate {
 //                parameters.updateValue(valueParameter, forKey: keyParameter)
 //            }
             if let valueParameter = value as? String, let keyParameter = key as? String {
-                parameters.updateValue(valueParameter, forKey: keyParameter)
+                parameters.updateValue(keyParameter, forKey: valueParameter)
             }
         })
         
